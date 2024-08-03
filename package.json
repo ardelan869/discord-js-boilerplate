@@ -1,0 +1,28 @@
+{
+  "name": "discord-js-boilerplate",
+  "module": "./src/index.ts",
+  "main": "./src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "nodemon ./src/index.ts",
+    "start": "node dist/index.js"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "@kineticcafe/rollup-plugin-delete": "^3.0.0",
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/node": "^22.0.3",
+    "nodemon": "^3.1.4",
+    "rollup": "^4.20.0",
+    "tsx": "^4.16.3"
+  },
+  "dependencies": {
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5"
+  }
+}
