@@ -1,14 +1,7 @@
 {
   "restartable": "rs",
-  "ignore": [
-    ".git",
-    "dist/",
-    "node_modules/"
-  ],
-  "watch": [
-    "src/*",
-    ".dev.env"
-  ],
+  "ignore": [".git", "dist/", "node_modules/"],
+  "watch": ["src/*", ".dev.env"],
   "execMap": {
     "ts": "tsx"
   },
