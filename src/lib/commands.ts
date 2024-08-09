@@ -52,15 +52,11 @@ async function register() {
 
   const rest = new REST({ version: '10' }).setToken(global.env.CLIENT_TOKEN!);
 
-  rest.put(
-    Routes.applicationGuildCommands(
-      global.env.CLIENT_ID!,
-      global.env.GUILD_ID!
-    ),
-    {
+  env.GUILD_IDS.forEach((id) => {
+    rest.put(Routes.applicationGuildCommands(global.env.CLIENT_ID!, id), {
       body: deploys,
-    }
-  );
+    });
+  });
 }
 
 export { command, register, type Command, type CommandCallback };

@@ -29,11 +29,11 @@ A boilerplate for a Discord bot written in TypeScript. The boilerplate is inspir
 
 - [x] Add ESLint & Prettier
 - [x] Make env variables type-safe
+- [x] Add multiple-guild support
 - [ ] Add runtime editing/unregistering to commands & events
 - [ ] Improve buttons and selections.
   - [ ] Add temporary components
   - [ ] Add awaitable functions (maybe)
-- [ ] Add multiple-guild support
 - [ ] Add a logger
 - [ ] Add utilities (date formatting, etc.)
 - [ ] Add stuff for User Applications
