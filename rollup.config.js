@@ -42,5 +42,5 @@ export default {
       noEmitOnError: false,
     }),
   ],
-  external: ['discord.js', 'dotenv', 'node:*'],
+  external: ['discord.js', 'dotenv', 'zod', 'node:*'],
 };
