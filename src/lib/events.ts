@@ -14,15 +14,13 @@ type EventCallback<T extends EventKeys> = (
 interface Event<T extends EventKeys = EventKeys> {
   key: T;
   callback: EventCallback<T>;
-  once: boolean;
 }
 
 function event<T extends EventKeys>(
   key: T,
-  callback: EventCallback<T>,
-  once: boolean = false
+  callback: EventCallback<T>
 ): Event<T> {
-  return { key, callback, once };
+  return { key, callback };
 }
 
 async function register() {
@@ -39,8 +37,10 @@ async function register() {
 
     if (!event || !('key' in event) || !('callback' in event)) continue;
 
+    const once = file.once ?? false;
+
     if (!isDev || global.dev)
-      global.client[event.once ? 'once' : 'on'](
+      global.client[once ? 'once' : 'on'](
         event.key,
         async (...args: ClientEvents[keyof ClientEvents]) => {
           await event.callback(...args);
