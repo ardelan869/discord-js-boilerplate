@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { readdirSync } from 'fs';
+import { existsSync, readdirSync } from 'fs';
 
 import { type ClientEvents, type Awaitable, Events } from 'discord.js';
 
@@ -26,6 +26,8 @@ function event<T extends EventKeys>(
 }
 
 async function register() {
+  if (existsSync(EVENTS_PATH)) return;
+
   const files = readdirSync(EVENTS_PATH).filter(
     (file) => file.endsWith('.ts') || file.endsWith('.js')
   );

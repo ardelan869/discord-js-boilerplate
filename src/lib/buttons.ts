@@ -1,5 +1,5 @@
 import type { Awaitable, ButtonInteraction } from 'discord.js';
-import { readdirSync } from 'fs';
+import { existsSync, readdirSync } from 'fs';
 import { join } from 'path';
 
 const BUTTONS_PATH = join(
@@ -20,6 +20,8 @@ function callback(id: string, callback: ButtonCallback): Button {
 }
 
 async function register() {
+  if (existsSync(BUTTONS_PATH)) return;
+
   const files = readdirSync(BUTTONS_PATH).filter(
     (file) => file.endsWith('.ts') || file.endsWith('.js')
   );

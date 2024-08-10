@@ -1,5 +1,5 @@
 import type { Awaitable, StringSelectMenuInteraction } from 'discord.js';
-import { readdirSync } from 'fs';
+import { existsSync, readdirSync } from 'fs';
 import { join } from 'path';
 
 const SELECTIONS_PATH = join(
@@ -22,6 +22,8 @@ function callback(id: string, callback: SelectionCallback): Selection {
 }
 
 async function register() {
+  if (existsSync(SELECTIONS_PATH)) return;
+
   const files = readdirSync(SELECTIONS_PATH).filter(
     (file) => file.endsWith('.ts') || file.endsWith('.js')
   );

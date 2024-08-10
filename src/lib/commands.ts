@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { readdirSync } from 'fs';
+import { existsSync, readdirSync } from 'fs';
 
 import {
   REST,
@@ -31,6 +31,8 @@ function command(
 }
 
 async function register() {
+  if (existsSync(COMMANDS_PATH)) return;
+
   const files = readdirSync(COMMANDS_PATH).filter(
     (file) => file.endsWith('.ts') || file.endsWith('.js')
   );
