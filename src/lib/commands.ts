@@ -5,7 +5,8 @@ import {
   REST,
   Routes,
   type SlashCommandBuilder,
-  type CommandInteraction,
+  type SlashCommandOptionsOnlyBuilder,
+  type ChatInputCommandInteraction,
   type Awaitable,
   type RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord.js';
@@ -16,15 +17,15 @@ const COMMANDS_PATH = join(
   'commands'
 );
 
-type CommandCallback = (interaction: CommandInteraction) => Awaitable<unknown>;
+type CommandCallback = (interaction: ChatInputCommandInteraction) => Awaitable<unknown>;
 
 interface Command {
-  data: SlashCommandBuilder;
+  data: SlashCommandBuilder | SlashCommandOptionsOnlyBuilder;
   callback: CommandCallback;
 }
 
 function command(
-  data: SlashCommandBuilder,
+  data: SlashCommandBuilder | SlashCommandOptionsOnlyBuilder,
   callback: CommandCallback
 ): Command {
   return { data, callback };
