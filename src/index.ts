@@ -1,10 +1,10 @@
 import '@/env';
 import { Client, Collection } from 'discord.js';
 
-import type { ModalResolver } from '@/lib/modals';
-import { register as registerEvents } from '@/lib/events';
-import { register as regsiterCommands, type Command } from '@/lib/commands';
 import { register as registerButtons, type Button } from '@/lib/buttons';
+import { register as registerCommands, type Command } from '@/lib/commands';
+import { register as registerEvents } from '@/lib/events';
+import type { ModalResolver } from '@/lib/modals';
 import {
   register as registerSelections,
   type Selection,
@@ -35,7 +35,7 @@ async function main() {
   else global.config = null;
 
   await registerEvents();
-  await regsiterCommands();
+  await registerCommands();
   await registerButtons();
   await registerSelections();
 
@@ -49,4 +49,4 @@ async function main() {
 
 main();
 
-export { client as default, client, type ExtendedClient };
+export { client, client as default, type ExtendedClient };
