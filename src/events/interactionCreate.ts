@@ -1,79 +1,106 @@
 import { event, Events } from '@/lib/events';
+import {
+  ButtonInteraction,
+  ChatInputCommandInteraction,
+  Interaction,
+  ModalSubmitInteraction,
+  StringSelectMenuInteraction,
+} from 'discord.js';
 
-export default event(Events.InteractionCreate, async (interaction) => {
-  if (interaction.isChatInputCommand()) {
-    const command = global.client.commands.get(interaction.commandName);
+interface ExtendedClient {
+  commands: Map<
+    string,
+    { callback: (interaction: ChatInputCommandInteraction) => Promise<void> }
+  >;
+  buttons: Map<
+    string,
+    { callback: (interaction: ButtonInteraction) => Promise<void> }
+  >;
+  modals: Map<string, (interaction: ModalSubmitInteraction) => Promise<void>>;
+  selections: Map<
+    string,
+    { callback: (interaction: StringSelectMenuInteraction) => Promise<void> }
+  >;
+}
 
-    if (!command)
-      return console.warn(
-        `No command matching ${interaction.commandName} was found.`
-      );
+type InteractionHandler<T extends Interaction> = (
+  interaction: T
+) => Promise<void>;
 
-    try {
-      await command.callback(interaction);
-    } catch (error) {
-      console.error(error);
+const handleInteraction = async <T extends Interaction>(
+  interaction: T,
+  type: string,
+  collection: keyof ExtendedClient
+): Promise<void> => {
+  const key =
+    'customId' in interaction
+      ? interaction.customId
+      : 'commandName' in interaction
+        ? interaction.commandName
+        : null;
 
-      await interaction.reply({
-        content: 'An error occurred while executing this command.',
-        ephemeral: true,
-      });
-    }
-  } else if (interaction.isButton()) {
-    const button = global.client.buttons.get(interaction.customId);
-
-    if (!button)
-      return console.warn(
-        `No button matching ${interaction.customId} was found.`
-      );
-
-    try {
-      await button.callback(interaction);
-    } catch (error) {
-      console.error(error);
-
-      await interaction.reply({
-        content: 'An error occurred while executing this button.',
-        ephemeral: true,
-      });
-    }
-  } else if (interaction.isModalSubmit()) {
-    const modal = global.client.modals.get(interaction.customId);
-
-    if (!modal)
-      return console.warn(
-        `No modal matching ${interaction.customId} was found.`
-      );
-
-    try {
-      modal(interaction);
-    } catch (error) {
-      console.error(error);
-
-      await interaction.reply({
-        content: 'An error occurred while executing this modal.',
-        ephemeral: true,
-      });
-    }
-  } else if (interaction.isStringSelectMenu()) {
-    const selection = global.client.selections.get(interaction.customId);
-
-    if (!selection)
-      return console.warn(
-        `No selection matching ${interaction.customId} was found.`
-      );
-
-    try {
-      selection.callback(interaction);
-    } catch (error) {
-      console.error(error);
-
-      await interaction.reply({
-        content: 'An error occurred while executing this selection.',
-        ephemeral: true,
-      });
-    }
-  } else {
-    console.warn(`No interaction type matching ${interaction.type} was found.`);
+  if (key === null) {
+    console.warn(`Unable to find key for ${type}`);
+    return;
   }
-});
+
+  const item = global.client[collection].get(key);
+  if (!item) {
+    console.warn(`No ${type} matching ${key} was found.`);
+    return;
+  }
+
+  try {
+    if (typeof item === 'function') {
+      (item as (interaction: Interaction) => void)(interaction);
+    } else if ('callback' in item && typeof item.callback === 'function') {
+      await (item.callback as (interaction: Interaction) => Promise<void>)(
+        interaction
+      );
+    } else {
+      throw new Error(`Invalid ${type} structure`);
+    }
+  } catch (error) {
+    console.error(`Error in ${type}:`, error);
+    if ('reply' in interaction && typeof interaction.reply === 'function') {
+      await interaction
+        .reply({
+          content: `An error occurred while executing this ${type}.`,
+          ephemeral: true,
+        })
+        .catch(console.error);
+    }
+  }
+};
+
+const interactionHandlers: {
+  [K in Interaction['constructor']['name']]?: InteractionHandler<
+    Extract<Interaction, { constructor: { name: K } }>
+  >;
+} = {
+  ChatInputCommandInteraction: (interaction) =>
+    handleInteraction(interaction, 'command', 'commands'),
+  ButtonInteraction: (interaction) =>
+    handleInteraction(interaction, 'button', 'buttons'),
+  ModalSubmitInteraction: (interaction) =>
+    handleInteraction(interaction, 'modal', 'modals'),
+  StringSelectMenuInteraction: (interaction) =>
+    handleInteraction(interaction, 'selection', 'selections'),
+};
+
+export default event(
+  Events.InteractionCreate,
+  async (interaction: Interaction) => {
+    const handler =
+      interactionHandlers[
+        interaction.constructor.name as keyof typeof interactionHandlers
+      ];
+    if (handler) {
+      await handler(interaction as never);
+    } else {
+      console.warn(
+        `No interaction handler for type ${interaction.constructor.name} was found.`
+      );
+    }
+  }
+);
