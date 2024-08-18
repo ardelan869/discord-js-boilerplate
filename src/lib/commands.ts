@@ -1,14 +1,14 @@
-import { join } from 'path';
 import { existsSync, readdirSync } from 'fs';
+import { join } from 'path';
 
 import {
   REST,
   Routes,
+  type Awaitable,
+  type ChatInputCommandInteraction,
+  type RESTPostAPIChatInputApplicationCommandsJSONBody,
   type SlashCommandBuilder,
   type SlashCommandOptionsOnlyBuilder,
-  type ChatInputCommandInteraction,
-  type Awaitable,
-  type RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord.js';
 
 const COMMANDS_PATH = join(
@@ -17,7 +17,9 @@ const COMMANDS_PATH = join(
   'commands'
 );
 
-type CommandCallback = (interaction: ChatInputCommandInteraction) => Awaitable<unknown>;
+type CommandCallback = (
+  interaction: ChatInputCommandInteraction
+) => Awaitable<unknown>;
 
 interface Command {
   data: SlashCommandBuilder | SlashCommandOptionsOnlyBuilder;
@@ -53,7 +55,7 @@ async function register() {
     }
   }
 
-  const rest = new REST({ version: '10' }).setToken(global.env.CLIENT_TOKEN!);
+  const rest = new REST({ version: '10' }).setToken(global.env.CLIENT_TOKEN);
 
   env.GUILD_IDS.forEach((id) => {
     rest.put(Routes.applicationGuildCommands(global.env.CLIENT_ID!, id), {
