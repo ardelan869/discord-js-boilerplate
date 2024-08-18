@@ -22,7 +22,7 @@ function callback(id: string, callback: SelectionCallback): Selection {
 }
 
 async function register() {
-  if (existsSync(SELECTIONS_PATH)) return;
+  if (!existsSync(SELECTIONS_PATH)) return;
 
   const files = readdirSync(SELECTIONS_PATH).filter(
     (file) => file.endsWith('.ts') || file.endsWith('.js')

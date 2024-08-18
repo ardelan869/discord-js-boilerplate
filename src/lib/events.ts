@@ -24,7 +24,7 @@ function event<T extends EventKeys>(
 }
 
 async function register() {
-  if (existsSync(EVENTS_PATH)) return;
+  if (!existsSync(EVENTS_PATH)) return;
 
   const files = readdirSync(EVENTS_PATH).filter(
     (file) => file.endsWith('.ts') || file.endsWith('.js')

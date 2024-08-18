@@ -20,7 +20,7 @@ function callback(id: string, callback: ButtonCallback): Button {
 }
 
 async function register() {
-  if (existsSync(BUTTONS_PATH)) return;
+  if (!existsSync(BUTTONS_PATH)) return;
 
   const files = readdirSync(BUTTONS_PATH).filter(
     (file) => file.endsWith('.ts') || file.endsWith('.js')
