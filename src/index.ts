@@ -2,7 +2,6 @@ import '@/env';
 import { Client, Collection } from 'discord.js';
 
 import type { ModalResolver } from '@/lib/modals';
-
 import { register as registerEvents } from '@/lib/events';
 import { register as regsiterCommands, type Command } from '@/lib/commands';
 import { register as registerButtons, type Button } from '@/lib/buttons';
@@ -10,6 +9,7 @@ import {
   register as registerSelections,
   type Selection,
 } from '@/lib/selections';
+import { existsSync } from 'fs';
 
 interface ExtendedClient extends Client {
   commands: Collection<string, Command>;
@@ -30,6 +30,10 @@ client.selections = new Collection();
 global.client = client;
 
 async function main() {
+  if (existsSync('../config.json'))
+    global.config = await import('../config.json');
+  else global.config = null;
+
   await registerEvents();
   await regsiterCommands();
   await registerButtons();
@@ -45,5 +49,4 @@ async function main() {
 
 main();
 
-export { client, type ExtendedClient };
-export default client;
+export { client as default, client, type ExtendedClient };

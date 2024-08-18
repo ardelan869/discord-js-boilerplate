@@ -24,6 +24,7 @@ A boilerplate for a Discord bot written in TypeScript. The boilerplate is inspir
 - `global.dev` (boolean): Whether the bot is in development mode or not.
 - `global.client` (Client): The Discord.js Client instance.
 - `global.env` (Env): The environment variables.
+- `global.config` (Config): Your config.json file, including type-safety.
 
 # Todo
 
