@@ -1,37 +1,15 @@
 import { event, Events } from '@/lib/events';
-import {
-  ButtonInteraction,
-  ChatInputCommandInteraction,
-  Interaction,
-  ModalSubmitInteraction,
-  StringSelectMenuInteraction,
-} from 'discord.js';
-
-interface ExtendedClient {
-  commands: Map<
-    string,
-    { callback: (interaction: ChatInputCommandInteraction) => Promise<void> }
-  >;
-  buttons: Map<
-    string,
-    { callback: (interaction: ButtonInteraction) => Promise<void> }
-  >;
-  modals: Map<string, (interaction: ModalSubmitInteraction) => Promise<void>>;
-  selections: Map<
-    string,
-    { callback: (interaction: StringSelectMenuInteraction) => Promise<void> }
-  >;
-}
+import { Interaction } from 'discord.js';
 
 type InteractionHandler<T extends Interaction> = (
   interaction: T
 ) => Promise<void>;
 
-const handleInteraction = async <T extends Interaction>(
+async function handleInteraction<T extends Interaction>(
   interaction: T,
   type: string,
-  collection: keyof ExtendedClient
-): Promise<void> => {
+  collection: 'commands' | 'buttons' | 'modals' | 'selections'
+): Promise<void> {
   const key =
     'customId' in interaction
       ? interaction.customId
@@ -39,39 +17,31 @@ const handleInteraction = async <T extends Interaction>(
         ? interaction.commandName
         : null;
 
-  if (key === null) {
-    console.warn(`Unable to find key for ${type}`);
-    return;
-  }
+  if (key === null) return console.warn(`Unable to find key for ${type}`);
 
   const item = global.client[collection].get(key);
-  if (!item) {
-    console.warn(`No ${type} matching ${key} was found.`);
-    return;
-  }
+
+  if (!item) return console.warn(`No ${type} matching ${key} was found.`);
 
   try {
-    if (typeof item === 'function') {
-      (item as (interaction: Interaction) => void)(interaction);
-    } else if ('callback' in item && typeof item.callback === 'function') {
+    if (typeof item === 'function') item(interaction as never);
+    else if ('callback' in item && typeof item.callback === 'function')
       await (item.callback as (interaction: Interaction) => Promise<void>)(
         interaction
       );
-    } else {
-      throw new Error(`Invalid ${type} structure`);
-    }
+    else throw new Error(`Invalid ${type} structure`);
   } catch (error) {
     console.error(`Error in ${type}:`, error);
-    if ('reply' in interaction && typeof interaction.reply === 'function') {
+
+    if ('reply' in interaction && typeof interaction.reply === 'function')
       await interaction
         .reply({
           content: `An error occurred while executing this ${type}.`,
           ephemeral: true,
         })
         .catch(console.error);
-    }
   }
-};
+}
 
 const interactionHandlers: {
   [K in Interaction['constructor']['name']]?: InteractionHandler<
@@ -95,12 +65,11 @@ export default event(
       interactionHandlers[
         interaction.constructor.name as keyof typeof interactionHandlers
       ];
-    if (handler) {
-      await handler(interaction as never);
-    } else {
-      console.warn(
-        `No interaction handler for type ${interaction.constructor.name} was found.`
-      );
-    }
+
+    if (handler) return await handler(interaction as never);
+
+    console.warn(
+      `No interaction handler for type ${interaction.constructor.name} was found.`
+    );
   }
 );
