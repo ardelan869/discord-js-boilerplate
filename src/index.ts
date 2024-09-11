@@ -31,9 +31,10 @@ client.selections = new Collection();
 global.client = client;
 
 async function main() {
-  if (existsSync('../config.json'))
-    global.config = await import('../config.json');
-  else global.config = null;
+  if (existsSync('../config.json') || existsSync('./config.json'))
+    global.config = await import('../config.json', {
+      assert: { type: 'json' },
+    });
 
   await registerEvents();
   await registerCommands();

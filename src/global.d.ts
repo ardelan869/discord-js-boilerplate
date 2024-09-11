@@ -6,7 +6,7 @@ declare global {
   var client: import('@/index').ExtendedClient;
   var env: z.infer<typeof envSchema>;
   var dev: boolean;
-  var config: typeof import('../config.json') | null;
+  var config: typeof import('../config.json');
 }
 
 export {};
