@@ -31,10 +31,15 @@ client.selections = new Collection();
 global.client = client;
 
 async function main() {
-  if (existsSync('../config.json') || existsSync('./config.json'))
-    global.config = await import('../config.json', {
-      assert: { type: 'json' },
+  if (existsSync('./config.json') || existsSync('../config.json')) {
+    const file = await import('../config.json', {
+      assert: {
+        type: 'json',
+      },
     });
+
+    global.config = 'default' in file ? file.default : file;
+  }
 
   await registerEvents();
   await registerCommands();
