@@ -37,7 +37,7 @@ async function handleInteraction<T extends Interaction>(
       await interaction
         .reply({
           content: `An error occurred while executing this ${type}.`,
-          ephemeral: true,
+          ephemeral: true
         })
         .catch(console.error);
   }
@@ -55,7 +55,7 @@ const interactionHandlers: {
   ModalSubmitInteraction: (interaction) =>
     handleInteraction(interaction, 'modal', 'modals'),
   StringSelectMenuInteraction: (interaction) =>
-    handleInteraction(interaction, 'selection', 'selections'),
+    handleInteraction(interaction, 'selection', 'selections')
 };
 
 export default event(

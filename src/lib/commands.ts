@@ -8,7 +8,7 @@ import {
   type ChatInputCommandInteraction,
   type RESTPostAPIChatInputApplicationCommandsJSONBody,
   type SlashCommandBuilder,
-  type SlashCommandOptionsOnlyBuilder,
+  type SlashCommandOptionsOnlyBuilder
 } from 'discord.js';
 
 const COMMANDS_PATH = join(
@@ -59,7 +59,7 @@ async function register() {
 
   env.GUILD_IDS.forEach((id) => {
     rest.put(Routes.applicationGuildCommands(global.env.CLIENT_ID!, id), {
-      body: deploys,
+      body: deploys
     });
   });
 }

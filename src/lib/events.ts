@@ -55,5 +55,5 @@ export {
   Events,
   type Event,
   type EventKeys,
-  type EventCallback,
+  type EventCallback
 };

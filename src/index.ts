@@ -9,7 +9,7 @@ import { register as registerCommands, type Command } from '@/lib/commands';
 import { register as registerButtons, type Button } from '@/lib/buttons';
 import {
   register as registerSelections,
-  type Selection,
+  type Selection
 } from '@/lib/selections';
 
 interface ExtendedClient extends Client {
@@ -20,7 +20,7 @@ interface ExtendedClient extends Client {
 }
 
 const client = new Client({
-  intents: [],
+  intents: []
 }) as ExtendedClient;
 
 client.commands = new Collection();
@@ -34,8 +34,8 @@ async function main() {
   if (existsSync('./config.json') || existsSync('../config.json')) {
     const file = await import('../config.json', {
       assert: {
-        type: 'json',
-      },
+        type: 'json'
+      }
     });
 
     global.config = 'default' in file ? file.default : file;
