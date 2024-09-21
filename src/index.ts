@@ -1,5 +1,5 @@
 import '@/env';
-import { Client, Collection } from 'discord.js';
+import { Client, Collection, GatewayIntentBits } from 'discord.js';
 
 import { existsSync } from 'fs';
 
@@ -11,6 +11,7 @@ import {
   register as registerSelections,
   type Selection
 } from '@/lib/selections';
+import { register as registerScripts } from '@/lib/scripts';
 
 interface ExtendedClient extends Client {
   commands: Collection<string, Command>;
@@ -20,7 +21,9 @@ interface ExtendedClient extends Client {
 }
 
 const client = new Client({
-  intents: []
+  intents: [
+    GatewayIntentBits.GuildMembers // Needed for 'guildMemberUpdate' event
+  ]
 }) as ExtendedClient;
 
 client.commands = new Collection();
@@ -45,6 +48,7 @@ async function main() {
   await registerCommands();
   await registerButtons();
   await registerSelections();
+  await registerScripts();
 
   try {
     await client.login(global.env.CLIENT_TOKEN);
