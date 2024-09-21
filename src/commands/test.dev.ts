@@ -19,6 +19,11 @@ export default command(
       .setLabel('Example Button')
       .setStyle(ButtonStyle.Primary);
 
+    const modalButton = new ButtonBuilder()
+      .setCustomId('modal-example')
+      .setLabel('Modal Example')
+      .setStyle(ButtonStyle.Primary);
+
     const exampleSelection = new StringSelectMenuBuilder()
       .setCustomId('example-selection')
       .setPlaceholder('Select an option')
@@ -32,6 +37,7 @@ export default command(
       content: 'test',
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(exampleButton),
+        new ActionRowBuilder<ButtonBuilder>().addComponents(modalButton),
         new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
           exampleSelection
         )
