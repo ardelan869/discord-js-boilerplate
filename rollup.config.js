@@ -22,6 +22,23 @@ const inputs = getFiles('src')
     return acc;
   }, {});
 
+const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
+
+const external = [
+  'discord.js',
+  'dotenv',
+  'zod',
+  'node:*',
+  /.*\.json$/,
+  /node_modules/,
+  /node_modules\/.*/,
+  ...Object.keys({
+    ...(packageJson.peerDependencies || {}),
+    ...(packageJson.dependencies || {}),
+    ...(packageJson.devDependencies || {})
+  })
+];
+
 export default {
   input: inputs,
   output: {
@@ -42,5 +59,5 @@ export default {
       noEmitOnError: false,
     }),
   ],
-  external: ['discord.js', 'dotenv', 'zod', 'node:*', /.*\.json$/],
+  external
 };
