@@ -1,5 +1,6 @@
 import { existsSync, readdirSync } from 'fs';
 import { join } from 'path';
+import { pathToFileURL } from 'url';
 
 const SCRIPTS_PATH = join(
   process.cwd(),
@@ -15,7 +16,8 @@ async function register() {
   );
 
   for (const fileName of files) {
-    const file = await import(join('file://', SCRIPTS_PATH, fileName));
+    const filePath = pathToFileURL(join(SCRIPTS_PATH, fileName));
+    const file = await import(filePath.href);
     const script = file.default;
     const isDev = fileName.includes('.dev.');
     const interval = file.interval;

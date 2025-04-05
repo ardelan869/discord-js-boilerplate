@@ -1,6 +1,7 @@
 import type { Awaitable, StringSelectMenuInteraction } from 'discord.js';
 import { existsSync, readdirSync } from 'fs';
 import { join } from 'path';
+import { pathToFileURL } from 'url';
 
 const SELECTIONS_PATH = join(
   process.cwd(),
@@ -29,7 +30,8 @@ async function register() {
   );
 
   for (const fileName of files) {
-    const file = await import(join('file://', SELECTIONS_PATH, fileName));
+    const filePath = pathToFileURL(join(SELECTIONS_PATH, fileName));
+    const file = await import(filePath.href);
     const selection = file.default;
     const isDev = fileName.includes('.dev.');
 

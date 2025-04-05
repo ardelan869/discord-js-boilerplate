@@ -2,6 +2,7 @@ import { join } from 'path';
 import { existsSync, readdirSync } from 'fs';
 
 import { type ClientEvents, type Awaitable, Events } from 'discord.js';
+import { pathToFileURL } from 'url';
 
 const EVENTS_PATH = join(process.cwd(), global.dev ? 'src' : 'dist', 'events');
 
@@ -31,7 +32,8 @@ async function register() {
   );
 
   for (const fileName of files) {
-    const file = await import(join('file://', EVENTS_PATH, fileName));
+    const filePath = pathToFileURL(join(EVENTS_PATH, fileName));
+    const file = await import(filePath.href);
     const event = file.default;
     const isDev = fileName.includes('.dev.');
 

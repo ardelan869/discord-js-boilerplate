@@ -10,6 +10,7 @@ import {
   type SlashCommandBuilder,
   type SlashCommandOptionsOnlyBuilder
 } from 'discord.js';
+import { pathToFileURL } from 'url';
 
 const COMMANDS_PATH = join(
   process.cwd(),
@@ -43,7 +44,8 @@ async function register() {
   const deploys: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
 
   for (const fileName of files) {
-    const file = await import(join('file://', COMMANDS_PATH, fileName));
+    const filePath = pathToFileURL(join(COMMANDS_PATH, fileName));
+    const file = await import(filePath.href);
     const command = file.default;
     const isDev = fileName.includes('.dev.');
 
