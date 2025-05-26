@@ -10,7 +10,7 @@ function getFiles(dir) {
   return readdirSync(dir).reduce((files, file) => {
     const name = join(dir, file);
     const isDirectory = statSync(name).isDirectory();
-    return isDirectory ? [...files, ...getFiles(name)] : [...files, name];
+    return isDirectory ? files.concat(getFiles(name)) : files.concat(name);
   }, []);
 }
 
