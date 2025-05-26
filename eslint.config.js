@@ -8,5 +8,5 @@ export default [
   { languageOptions: { globals: globals.node } },
   eslintPluginPrettierRecommended,
   pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
+  ...tseslint.configs.recommended
 ];

@@ -31,6 +31,7 @@ A boilerplate for a Discord bot written in TypeScript. The boilerplate is inspir
 - [x] Add ESLint & Prettier
 - [x] Make env variables type-safe
 - [x] Add multiple-guild support
+- [x] Add an ORM, like Drizzle, or Prisma (maybe)
 - [ ] Add runtime editing/unregistering to commands & events
 - [ ] Improve buttons and selections.
   - [ ] Add temporary components
@@ -38,4 +39,3 @@ A boilerplate for a Discord bot written in TypeScript. The boilerplate is inspir
 - [ ] Add a logger
 - [ ] Add utilities (date formatting, etc.)
 - [ ] Add stuff for User Applications
-- [ ] Add an ORM, like Drizzle, or Prisma (maybe)
