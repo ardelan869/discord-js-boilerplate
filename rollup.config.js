@@ -3,7 +3,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import { del } from '@kineticcafe/rollup-plugin-delete';
 
-import { readdirSync, statSync } from 'fs';
+import { readFileSync, readdirSync, statSync } from 'fs';
 import { join, relative } from 'path';
 
 function getFiles(dir) {
@@ -46,7 +46,7 @@ export default {
     format: 'esm',
     preserveModules: true,
     preserveModulesRoot: 'src',
-    sourcemap: false,
+    sourcemap: false
   },
   plugins: [
     del({ targets: 'dist/*' }),
@@ -56,8 +56,8 @@ export default {
       sourceMap: false,
       tsconfig: './tsconfig.json',
       outputToFilesystem: true,
-      noEmitOnError: false,
-    }),
+      noEmitOnError: false
+    })
   ],
   external
 };
