@@ -1,8 +1,8 @@
-import { join } from 'path';
-import { existsSync, readdirSync } from 'fs';
+import { join } from 'node:path';
+import { existsSync, readdirSync } from 'node:fs';
 
 import { type ClientEvents, type Awaitable, Events } from 'discord.js';
-import { pathToFileURL } from 'url';
+import { pathToFileURL } from 'node:url';
 
 const EVENTS_PATH = join(process.cwd(), global.dev ? 'src' : 'dist', 'events');
 

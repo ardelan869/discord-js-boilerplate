@@ -1,5 +1,5 @@
 import { event, Events } from '@/lib/events';
-import { Interaction } from 'discord.js';
+import type { Interaction } from 'discord.js';
 
 type InteractionHandler<T extends Interaction> = (
   interaction: T

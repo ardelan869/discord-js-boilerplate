@@ -3,8 +3,8 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import { del } from '@kineticcafe/rollup-plugin-delete';
 
-import { readFileSync, readdirSync, statSync } from 'fs';
-import { join, relative } from 'path';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { join, relative } from 'node:path';
 
 function getFiles(dir) {
   return readdirSync(dir).reduce((files, file) => {
