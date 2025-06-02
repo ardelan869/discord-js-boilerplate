@@ -1,12 +1,11 @@
 /* eslint-disable no-var */
-import { z } from 'zod';
-import { envSchema } from './env';
+import type { z } from 'zod';
+import type { envSchema } from './env';
 
 declare global {
   var client: import('@/index').ExtendedClient;
   var env: z.infer<typeof envSchema>;
   var dev: boolean;
   var config: typeof import('../config.json');
+  var db: import('./generated/prisma').PrismaClient;
 }
-
-export {};

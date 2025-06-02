@@ -1,7 +1,7 @@
 import type { Awaitable, StringSelectMenuInteraction } from 'discord.js';
-import { existsSync, readdirSync } from 'fs';
-import { join } from 'path';
-import { pathToFileURL } from 'url';
+import { existsSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const SELECTIONS_PATH = join(
   process.cwd(),

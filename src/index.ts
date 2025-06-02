@@ -1,7 +1,7 @@
 import '@/env';
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
 
-import { existsSync } from 'fs';
+import { existsSync } from 'node:fs';
 
 import type { ModalResolver } from '@/lib/modals';
 import { register as registerEvents } from '@/lib/events';
@@ -12,6 +12,7 @@ import {
   type Selection
 } from '@/lib/selections';
 import { register as registerScripts } from '@/lib/scripts';
+import { PrismaClient } from './generated/prisma';
 
 interface ExtendedClient extends Client {
   commands: Collection<string, Command>;
@@ -31,6 +32,7 @@ client.buttons = new Collection();
 client.modals = new Collection();
 client.selections = new Collection();
 
+global.db = new PrismaClient();
 global.client = client;
 
 async function main() {

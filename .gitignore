@@ -106,3 +106,6 @@ bun.lockb
 pnpm-lock.yaml
 package-lock.json
 yarn.lock
+
+# Generated Prisma files
+/src/generated/prisma
