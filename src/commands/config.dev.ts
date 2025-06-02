@@ -30,38 +30,45 @@ export default command(
   async (interaction) => {
     const subcommand = interaction.options.getSubcommand();
 
-    let server = await global.client.db.guildConfig.findUnique({
+    let server = await global.db.guildConfig.findUnique({
       where: { id: interaction.guildId ?? '' }
     });
 
     if (!server) {
-      server = await global.client.db.guildConfig.create({
+      server = await global.db.guildConfig.create({
         data: { id: interaction.guildId ?? '' }
       });
     }
 
-    if (subcommand === 'view') {
-      await interaction.reply({
-        content: `Configuration for this server:\n\n**Welcome Channel:** ${server.welcomeChannelId ? `<#${server.welcomeChannelId}>` : 'Not set'}`
-      });
-    } else if (subcommand === 'edit') {
-      const welcomeChannel = interaction.options.getChannel('welcome_channel');
-
-      if (welcomeChannel) {
-        await global.client.db.guildConfig.update({
-          where: { id: interaction.guildId ?? '' },
-          data: { welcomeChannelId: welcomeChannel.id }
-        });
-
+    switch (subcommand) {
+      case 'view':
         await interaction.reply({
-          content: `✅ Configuration updated!\n\n**Welcome Channel:** <#${welcomeChannel.id}>`
+          content: `Configuration for this server:\n\n**Welcome Channel:** ${server.welcomeChannelId ? `<#${server.welcomeChannelId}>` : 'Not set'}`
         });
-      } else {
+        break;
+      case 'edit': {
+        const welcomeChannel =
+          interaction.options.getChannel('welcome_channel');
+
+        if (welcomeChannel) {
+          await global.db.guildConfig.update({
+            where: { id: interaction.guildId ?? '' },
+            data: { welcomeChannelId: welcomeChannel.id }
+          });
+
+          await interaction.reply({
+            content: `✅ Configuration updated!\n\n**Welcome Channel:** <#${welcomeChannel.id}>`
+          });
+        }
+
+        break;
+      }
+      default:
         await interaction.reply({
           content: 'Please specify at least one setting to update',
           ephemeral: true
         });
-      }
+        break;
     }
   }
 );

@@ -7,4 +7,5 @@ declare global {
   var env: z.infer<typeof envSchema>;
   var dev: boolean;
   var config: typeof import('../config.json');
+  var db: import('./generated/prisma').PrismaClient;
 }

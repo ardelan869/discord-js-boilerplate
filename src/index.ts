@@ -19,7 +19,6 @@ interface ExtendedClient extends Client {
   buttons: Collection<string, Button>;
   modals: Collection<string, ModalResolver>;
   selections: Collection<string, Selection>;
-  db: PrismaClient;
 }
 
 const client = new Client({
@@ -32,8 +31,8 @@ client.commands = new Collection();
 client.buttons = new Collection();
 client.modals = new Collection();
 client.selections = new Collection();
-client.db = new PrismaClient();
 
+global.db = new PrismaClient();
 global.client = client;
 
 async function main() {
