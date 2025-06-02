@@ -32,6 +32,8 @@ A boilerplate for a Discord bot written in TypeScript. The boilerplate is inspir
 - [x] Make env variables type-safe
 - [x] Add multiple-guild support
 - [x] Add an ORM, like Drizzle, or Prisma (maybe)
+  - [ ] Also add drizzle
+  - [ ] Integrate redis
 - [ ] Add runtime editing/unregistering to commands & events
 - [ ] Improve buttons and selections.
   - [ ] Add temporary components
