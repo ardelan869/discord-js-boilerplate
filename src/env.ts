@@ -9,17 +9,26 @@ export const envSchema = z.object({
   GUILD_IDS: z
     .string()
     .transform((val) => val.split(',').map((id) => id.trim())),
-  DATABASE_URL: z.string()
+
+  NEON_DATABASE_URL: z.string(),
+  REDIS_URL: z.string(),
+  REDIS_TOKEN: z.string()
 });
 
 global.dev = process.env.NODE_ENV === 'development';
-const devEnvPath = join(process.cwd(), '.dev.env');
-const envPath = existsSync(devEnvPath)
-  ? devEnvPath
-  : join(process.cwd(), '.env');
+
+function getConfigPath() {
+  const devEnvPath = join(process.cwd(), '.dev.env');
+
+  if (global.dev && existsSync(devEnvPath)) {
+    return devEnvPath;
+  }
+
+  return join(process.cwd(), '.env');
+}
 
 config({
-  path: envPath
+  path: getConfigPath()
 });
 
 global.env = envSchema.parse(process.env);
